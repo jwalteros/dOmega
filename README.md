@@ -20,6 +20,7 @@ The code implements the following modules:
 * **Degeneracy:** Given a simple undirected graph G, the code outputs the graph's degeneracy an a valid degeneracy ordering.
 * **Maximum clique:** Given a simple undirected graph G, the code finds the size of the largest clique.
 
+The code includes two implementations of the algorithm (LS and BS) depending on the way the algorithm performs the search (see Jose L. Walteros and Austin L. Buchanan. Why is maximum clique easy in practice? for further details). 
 
 Usage
 ---------
