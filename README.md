@@ -3,24 +3,23 @@ dOmega Library
 
 This code implements an efficient algorithm for the maximum clique
 problem that runs in time polynomial in the graph's size, but exponential
-in the clique-core difference d+1-omega (where d denotes the graph's degeneracy and omega
+in the clique-core gap g:=(d+1)-omega (where d denotes the graph's degeneracy and omega
 the size of the largest clique).
 
-When this difference is a constant, the running time is ${O}(dm)={O}(m^{1.5})$.
-Since 70% of common test instances have d-omega <= 3, our implementation
-performs rather well and is typically faster than other libaries approaches.
+When this gap $g$ can be treated as a constant, as is often the case for real-life graphs, 
+the proposed algorithm runs in time $O(dm)=O(m^{1.5})$.
 Key subroutines in our approach include existing kernelization and
 fixed-parameter tractable algorithms for vertex cover.
 
 Please cite the following paper if used:
-Jose L. Walteros and Austin L. Buchanan. Why is maximum clique easy in practice?
+Jose L. Walteros and Austin L. Buchanan. Why is maximum clique often easy in practice?
 
 The code implements the following modules:
 
 * **Degeneracy:** Given a simple undirected graph G, the code outputs the graph's degeneracy an a valid degeneracy ordering.
 * **Maximum clique:** Given a simple undirected graph G, the code finds the size of the largest clique.
 
-The code includes two implementations of the algorithm (LS and BS) depending on the way the algorithm performs the search (see Jose L. Walteros and Austin L. Buchanan. Why is maximum clique easy in practice? for further details). 
+The code includes two implementations of the algorithm (LS and BS(. The main difference between both implementations is the way in which the algorithm performs the search (see Jose L. Walteros and Austin L. Buchanan. Why is maximum clique often easy in practice? for further details). 
 
 Usage
 ---------
@@ -28,8 +27,14 @@ Usage
 ### Compiling the code
 The library provides a simple makefile to compile the library. The library has been tested on Linux (Ubuntu and CentOS), macOS X (Mavericks-Sierra), and Windows (Cygwin and VS)  
 
-		$ cd path/dOmega/
+* **For the LS version:** 
+		$ cd path/dOmega/LS
 		$ make
+        
+* **For the BS version:** 
+              $ cd path/dOmega/BS
+              $ make
+
 
 ### Input file format
 The code can receives as input adjacency lists and edge list files:
@@ -86,7 +91,7 @@ Terms and conditions
 
 Please feel free to use these codes. We only ask that you cite:  
 
-	Jose L. Walteros and Austin L. Buchanan. Why is maximum clique easy in practice?
+	Jose L. Walteros and Austin L. Buchanan. Why is maximum clique often easy in practice?
 
 _This library was implemented for academic purposes. You may use the library with no limitation for academic, commercial, and/or leisure applications without the need an explicit permission, other than the one granted by the MIT type license included in the library. We kindly ask you to aknowledge the library by citing the above paper in any publication that uses this resources._
 

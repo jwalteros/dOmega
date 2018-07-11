@@ -1,10 +1,13 @@
-CPP       = g++
-CPPARGS   = -O3 -m64 -std=c++14 -Wall -Wextra -pedantic -pthread
-SRCPATH		= ./src/
-BINPATH		= ./bin/
-INSTANCE	= -e ../../../Codes/Instances/txt/Other/cage15.graph.txt -m 8
+CPP           = g++
+CPPARGS       = -O3 -m64 -std=c++14 -Wall -Wextra -pedantic -pthread
+SRCPATH	      = ./src/
+BINPATH	      = ./bin/
+DATPATH	      = ./dat/
+NUMPROCESSORS = 8
+INSTANCE      = $(DATPATH)Wiki-Vote.dat
 
 all:
+	[ -d $(BINPATH) ] || mkdir -p $(BINPATH)
 	$(CPP) $(CPPARGS) $(SRCPATH)Clique.cpp \
 	$(SRCPATH)Graph.cpp \
 	$(SRCPATH)VertexCover.cpp \
@@ -12,7 +15,7 @@ all:
 	$(SRCPATH)Buss.cpp -o $(BINPATH)dOmega $(SRCPATH)main.cpp
 
 clean:
-	rm -rf $(BINPATH)*.o $(BINPATH)*.dSYM $(BINPATH)main
+	rm -rf $(BINPATH)*.o $(BINPATH)*.dSYM $(BINPATH)dOmega
 
 run:
-	$(BINPATH)dOmega $(INSTANCE)
+	$(BINPATH)dOmega -e $(INSTANCE) -m $(NUMPROCESSORS)
