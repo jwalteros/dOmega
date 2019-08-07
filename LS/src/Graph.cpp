@@ -430,7 +430,7 @@ void Graph::generateCompGraphRightNeighbors(
     int v,
     std::vector<subgraph>& subgraphs) {
     /**
-     * The following code populates the std::vector of right neiboors of v in
+     * The following code populates the std::vector of right neighboors of v in
      * the degeneracy ordering. The std::vector includes v as well.
      */
     subgraphs[v].created = true;
@@ -441,7 +441,7 @@ void Graph::generateCompGraphRightNeighbors(
      * they are adjacent in G. If not, it adds the corresponding edge to the
      * subgraph.
      *
-     * Since the adjacency lists are sorted, this can be done by binary search.
+     * See G. Manoussakis. New algorithms for cliques and related structures in k-degenerate graphs. arXiv preprint arXiv:1501.01819v4, 2016
      */
      int largestDegree = 0;
 
