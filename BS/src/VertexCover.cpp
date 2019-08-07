@@ -35,12 +35,13 @@
 #include "Graph.h"
 
 int VertexCover::degreePreprocessing(
-    int                             n,
-    int                             k,
-    std::vector<vertex>& vertices,
-    std::vector<std::vector<int> >& adjLists,
-    int& newK,
-    subgraph& kernel) {
+    int n,
+    int k,
+    std::vector<vertex> &vertices,
+    std::vector<std::vector<int>> &adjLists,
+    int &newK,
+    subgraph &kernel)
+{
     int numRemoved = 0;
     bool change = true;
 
@@ -51,20 +52,23 @@ int VertexCover::degreePreprocessing(
      * neighbors that have been removed or the vertex that have been attached
      * after a vertex folding.
      */
-    std::vector<int>degDecrease(n, 0);
-    std::vector<bool>removed(n, false);
+    std::vector<int> degDecrease(n, 0);
+    std::vector<bool> removed(n, false);
 
-    while (change && n - numRemoved > newK && newK >= 0) {
+    while (change && n - numRemoved > newK && newK >= 0)
+    {
         change = false;
 
         /**
          * Mark the vertices that will be removed based on their degree.
          */
-        for (std::vector<vertex>::iterator i = vertices.begin(); i < vertices.begin() + n && newK >= 0; i++) {
+        for (std::vector<vertex>::iterator i = vertices.begin(); i < vertices.begin() + n && newK >= 0; i++)
+        {
             /**
              * If i has degree > new K.
              */
-            if ((removed[i->pos] == false) && (i->degree - degDecrease[i->pos] > newK)) {
+            if ((removed[i->pos] == false) && (i->degree - degDecrease[i->pos] > newK))
+            {
                 removed[i->pos] = true;
                 numRemoved++;
 
@@ -74,31 +78,35 @@ int VertexCover::degreePreprocessing(
                 /**
                  * Decrease the degree fo the vertex's neigbors.
                  */
-                for (std::vector<int>::iterator current = adjLists[i->pos].begin(); current != adjLists[i->pos].end(); current++) {
-                    if (removed[*current] == false) {
+                for (std::vector<int>::iterator current = adjLists[i->pos].begin(); current != adjLists[i->pos].end(); current++)
+                {
+                    if (removed[*current] == false)
+                    {
                         degDecrease[*current]++;
                     }
                 }
                 continue;
             }
 
-
             /**
              * If i has degree 1 or 0.
              */
-            if ((removed[i->pos] == false) && (i->degree - degDecrease[i->pos] <= 1)) {
+            if ((removed[i->pos] == false) && (i->degree - degDecrease[i->pos] <= 1))
+            {
                 removed[i->pos] = true;
                 numRemoved++;
 
                 /**
                  * If i has degree 1, find its neighbor and mark it as removed.
                  */
-                if (i->degree - degDecrease[i->pos] == 1) {
+                if (i->degree - degDecrease[i->pos] == 1)
+                {
                     newK--;
                     change = true;
                     std::vector<int>::iterator neighbor = adjLists[i->pos].begin();
 
-                    while (removed[*neighbor] == true) {
+                    while (removed[*neighbor] == true)
+                    {
                         neighbor++;
                     }
 
@@ -108,8 +116,10 @@ int VertexCover::degreePreprocessing(
                     /**
                      * Decrease the degree fo the vertex's neigbors.
                      */
-                    for (std::vector<int>::iterator current = adjLists[*neighbor].begin(); current != adjLists[*neighbor].end(); current++) {
-                        if (removed[*current] == false) {
+                    for (std::vector<int>::iterator current = adjLists[*neighbor].begin(); current != adjLists[*neighbor].end(); current++)
+                    {
+                        if (removed[*current] == false)
+                        {
                             degDecrease[*current]++;
                         }
                     }
@@ -120,19 +130,22 @@ int VertexCover::degreePreprocessing(
             /**
              * If i has degree 2.
              */
-            if ((removed[i->pos] == false) && (i->degree - degDecrease[i->pos] == 2)) {
+            if ((removed[i->pos] == false) && (i->degree - degDecrease[i->pos] == 2))
+            {
                 /**
                  * Finds the neigbors.
                  */
                 std::vector<int>::iterator neighbor1 = adjLists[i->pos].begin();
 
-                while (removed[*neighbor1] == true) {
+                while (removed[*neighbor1] == true)
+                {
                     neighbor1++;
                 }
 
                 std::vector<int>::iterator neighbor2 = neighbor1 + 1;
 
-                while (removed[*neighbor2] == true) {
+                while (removed[*neighbor2] == true)
+                {
                     neighbor2++;
                 }
 
@@ -141,9 +154,12 @@ int VertexCover::degreePreprocessing(
                  */
                 bool adjacent = false;
 
-                if (vertices[*neighbor1].degree - degDecrease[*neighbor1] <= vertices[*neighbor2].degree - degDecrease[*neighbor2]) {
+                if (vertices[*neighbor1].degree - degDecrease[*neighbor1] <= vertices[*neighbor2].degree - degDecrease[*neighbor2])
+                {
                     adjacent = std::binary_search(adjLists[*neighbor1].begin(), adjLists[*neighbor1].end(), *neighbor2);
-                } else {
+                }
+                else
+                {
                     adjacent = std::binary_search(adjLists[*neighbor2].begin(), adjLists[*neighbor2].end(), *neighbor1);
                 }
 
@@ -154,23 +170,30 @@ int VertexCover::degreePreprocessing(
                 /**
                  * If the neighbors are adjacent, remove the three vertices.
                  */
-                if (adjacent) {
+                if (adjacent)
+                {
                     removed[i->pos] = true;
                     newK = newK - 2;
                     numRemoved = numRemoved + 3;
 
-                    for (std::vector<int>::iterator current = adjLists[*neighbor1].begin(); current != adjLists[*neighbor1].end(); current++) {
-                        if (removed[*current] == false) {
+                    for (std::vector<int>::iterator current = adjLists[*neighbor1].begin(); current != adjLists[*neighbor1].end(); current++)
+                    {
+                        if (removed[*current] == false)
+                        {
                             degDecrease[*current]++;
                         }
                     }
 
-                    for (std::vector<int>::iterator current = adjLists[*neighbor2].begin(); current != adjLists[*neighbor2].end(); current++) {
-                        if (removed[*current] == false) {
+                    for (std::vector<int>::iterator current = adjLists[*neighbor2].begin(); current != adjLists[*neighbor2].end(); current++)
+                    {
+                        if (removed[*current] == false)
+                        {
                             degDecrease[*current]++;
                         }
                     }
-                } else {
+                }
+                else
+                {
                     /**
                      * If the neighbors are not adjacent, performs a vertex folding.
                      */
@@ -184,18 +207,22 @@ int VertexCover::degreePreprocessing(
                     std::vector<int>::iterator current1 = adjLists[a].begin();
                     std::vector<int>::iterator current2 = adjLists[b].begin();
 
-                    while (current1 != adjLists[a].end() && current2 != adjLists[b].end()) {
-                        if ((removed[*current1] == true) || (vertices[*current1].v == i->v)) {
+                    while (current1 != adjLists[a].end() && current2 != adjLists[b].end())
+                    {
+                        if ((removed[*current1] == true) || (vertices[*current1].v == i->v))
+                        {
                             current1++;
                             continue;
                         }
 
-                        if ((removed[*current2] == true) || (vertices[*current2].v == i->v)) {
+                        if ((removed[*current2] == true) || (vertices[*current2].v == i->v))
+                        {
                             current2++;
                             continue;
                         }
 
-                        if (*current1 < *current2) {
+                        if (*current1 < *current2)
+                        {
                             std::vector<int>::iterator pos = std::lower_bound(adjLists[*current1].begin(), adjLists[*current1].end(), i->pos);
                             adjLists[*current1].insert(pos, i->pos);
                             adjLists[i->pos].push_back(*current1);
@@ -204,7 +231,8 @@ int VertexCover::degreePreprocessing(
                             continue;
                         }
 
-                        if (*current2 < *current1) {
+                        if (*current2 < *current1)
+                        {
                             std::vector<int>::iterator pos = std::lower_bound(adjLists[*current2].begin(), adjLists[*current2].end(), i->pos);
                             adjLists[*current2].insert(pos, i->pos);
                             adjLists[i->pos].push_back(*current2);
@@ -223,8 +251,10 @@ int VertexCover::degreePreprocessing(
                         current2++;
                     }
 
-                    while (current1 != adjLists[a].end()) {
-                        if ((removed[*current1] == false) && (vertices[*current1].v != i->v)) {
+                    while (current1 != adjLists[a].end())
+                    {
+                        if ((removed[*current1] == false) && (vertices[*current1].v != i->v))
+                        {
                             std::vector<int>::iterator pos = std::lower_bound(adjLists[*current1].begin(), adjLists[*current1].end(), i->pos);
                             adjLists[*current1].insert(pos, i->pos);
                             adjLists[i->pos].push_back(*current1);
@@ -233,8 +263,10 @@ int VertexCover::degreePreprocessing(
                         current1++;
                     }
 
-                    while (current2 != adjLists[b].end()) {
-                        if ((removed[*current2] == false) && (vertices[*current2].v != i->v)) {
+                    while (current2 != adjLists[b].end())
+                    {
+                        if ((removed[*current2] == false) && (vertices[*current2].v != i->v))
+                        {
                             std::vector<int>::iterator pos = std::lower_bound(adjLists[*current2].begin(), adjLists[*current2].end(), i->pos);
                             adjLists[*current2].insert(pos, i->pos);
                             adjLists[i->pos].push_back(*current2);
@@ -247,23 +279,27 @@ int VertexCover::degreePreprocessing(
         }
     }
 
-    if (n - numRemoved <= newK) {
+    if (n - numRemoved <= newK)
+    {
         return 1;
     }
 
-    if (newK <= 0) {
+    if (newK <= 0)
+    {
         return -1;
     }
 
     /**
      * Generates the kernel.
      */
-    std::vector<int>mask(n);
+    std::vector<int> mask(n);
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         vertex v = vertices[i];
 
-        if (removed[v.pos] == 0) {
+        if (removed[v.pos] == 0)
+        {
             kernel.vertices[kernel.n].v = v.v;
             kernel.vertices[kernel.n].degree = 0;
             kernel.vertices[kernel.n].pos = kernel.n;
@@ -275,21 +311,26 @@ int VertexCover::degreePreprocessing(
     int largestDegree = 0;
     kernel.m = 0;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         vertex v = vertices[i];
 
-        if (removed[v.pos] == false) {
+        if (removed[v.pos] == false)
+        {
             int pos = 0;
 
-            for (std::vector<int>::iterator current = adjLists[v.pos].begin(); current != adjLists[v.pos].end(); current++) {
-                if (removed[*current] == false) {
+            for (std::vector<int>::iterator current = adjLists[v.pos].begin(); current != adjLists[v.pos].end(); current++)
+            {
+                if (removed[*current] == false)
+                {
                     kernel.adjLists[mask[v.pos]][pos++] = mask[*current];
                     kernel.vertices[mask[v.pos]].degree++;
                 }
             }
             kernel.m += kernel.vertices[mask[v.pos]].degree;
 
-            if (largestDegree < kernel.vertices[mask[v.pos]].degree) {
+            if (largestDegree < kernel.vertices[mask[v.pos]].degree)
+            {
                 largestDegree = kernel.vertices[mask[v.pos]].degree;
                 kernel.largestDegreeVertex = mask[v.pos];
             }
@@ -307,7 +348,8 @@ int VertexCover::degreePreprocessing(
      * If the number of edges in the kernel is less than k*(k-highDegVertices),
      * returns -1 (there is no VC).
      */
-    if (kernel.m > k * newK) {
+    if (kernel.m > k * newK)
+    {
         return -1;
     }
 
@@ -319,15 +361,16 @@ int VertexCover::degreePreprocessing(
 
 void VertexCover::subgraphUpdate(
     int n,
-    int& numRemoved,
-    std::vector<vertex>& vertices,
-    std::vector<std::vector<int> >& adjLists,
-    std::vector<bool>& removed,
-    subgraph& sG) {
+    int &numRemoved,
+    std::vector<vertex> &vertices,
+    std::vector<std::vector<int>> &adjLists,
+    std::vector<bool> &removed,
+    subgraph &sG)
+{
     /**
      *  Position of the vertices in the kernel vector of vertices.
      */
-    std::vector<int>mask(n);
+    std::vector<int> mask(n);
 
     /**
      * The following code populates the vector of vertices in the kernel.
@@ -335,13 +378,15 @@ void VertexCover::subgraphUpdate(
     sG.n = n - numRemoved;
     sG.m = 0;
     sG.vertices = std::vector<vertex>(n - numRemoved);
-    sG.adjLists = std::vector<std::vector<int> >(n - numRemoved);
+    sG.adjLists = std::vector<std::vector<int>>(n - numRemoved);
     int count = 0;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         vertex v = vertices[i];
 
-        if (removed[v.pos] == false) {
+        if (removed[v.pos] == false)
+        {
             sG.vertices[count].v = v.v;
             sG.vertices[count].degree = 0;
             sG.vertices[count].pos = count;
@@ -357,19 +402,24 @@ void VertexCover::subgraphUpdate(
      */
     int largestDegree = 0;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         vertex v = vertices[i];
 
-        if (removed[v.pos] == false) {
-            for (std::vector<int>::iterator current = adjLists[v.pos].begin(); current != adjLists[v.pos].end(); current++) {
-                if (removed[*current] == false) {
+        if (removed[v.pos] == false)
+        {
+            for (std::vector<int>::iterator current = adjLists[v.pos].begin(); current != adjLists[v.pos].end(); current++)
+            {
+                if (removed[*current] == false)
+                {
                     sG.adjLists[mask[v.pos]].push_back(mask[*current]);
                     sG.vertices[mask[v.pos]].degree++;
                 }
             }
             sG.m += sG.vertices[mask[v.pos]].degree;
 
-            if (largestDegree < sG.vertices[mask[v.pos]].degree) {
+            if (largestDegree < sG.vertices[mask[v.pos]].degree)
+            {
                 largestDegree = sG.vertices[mask[v.pos]].degree;
                 sG.largestDegreeVertex = mask[v.pos];
             }
@@ -382,8 +432,9 @@ void VertexCover::subgraphUpdate(
 bool VertexCover::kVertexCover(
     int n,
     int k,
-    std::vector<vertex>& vertices,
-    std::vector<std::vector<int> >& adjLists) {
+    std::vector<vertex> &vertices,
+    std::vector<std::vector<int>> &adjLists)
+{
     /**
      * Creates tha kernel based on the procedure that preprocess that vertices
      * based on their degree (@see VertexCover::degreePreprocessing).
@@ -391,16 +442,18 @@ bool VertexCover::kVertexCover(
     subgraph sG;
 
     sG.vertices = std::vector<vertex>(n);
-    sG.adjLists = std::vector<std::vector<int> >(n);
+    sG.adjLists = std::vector<std::vector<int>>(n);
     sG.n = 0;
     int newK = 0;
     int success = degreePreprocessing(n, k, vertices, adjLists, newK, sG);
 
-    if (success == -1) {
+    if (success == -1)
+    {
         return false;
     }
 
-    if (success == 1) {
+    if (success == 1)
+    {
         return true;
     }
 
@@ -408,26 +461,31 @@ bool VertexCover::kVertexCover(
      * Generates the upper branch: Assumes a is in the vertex cover.
      */
     int a = sG.largestDegreeVertex;
-    std::vector<vertex>verticesUp(sG.n - 1);
-    std::vector<std::vector<int> >adjListsUp(sG.n - 1);
+    std::vector<vertex> verticesUp(sG.n - 1);
+    std::vector<std::vector<int>> adjListsUp(sG.n - 1);
     int count = 0;
 
-    for (int i = 0; i < sG.n; i++) {
-        if (i != a) {
+    for (int i = 0; i < sG.n; i++)
+    {
+        if (i != a)
+        {
             vertex v = vertices[i];
-            verticesUp[count].v      = v.v;
+            verticesUp[count].v = v.v;
             verticesUp[count].degree = 0;
-            verticesUp[count].pos    = count;
-            adjListsUp[count]        = std::vector<int>();
+            verticesUp[count].pos = count;
+            adjListsUp[count] = std::vector<int>();
             adjListsUp[count].reserve(v.degree);
 
-            for (std::vector<int>::iterator current = sG.adjLists[v.pos].begin(); current != sG.adjLists[v.pos].end(); current++) {
-                if (*current < a) {
+            for (std::vector<int>::iterator current = sG.adjLists[v.pos].begin(); current != sG.adjLists[v.pos].end(); current++)
+            {
+                if (*current < a)
+                {
                     adjListsUp[count].push_back(*current);
                     verticesUp[count].degree++;
                 }
 
-                if (*current > a) {
+                if (*current > a)
+                {
                     adjListsUp[count].push_back(*current - 1);
                     verticesUp[count].degree++;
                 }
@@ -436,29 +494,33 @@ bool VertexCover::kVertexCover(
         }
     }
 
-    if (kVertexCover(sG.n - 1, newK - 1, verticesUp, adjListsUp) == true) {
+    if (kVertexCover(sG.n - 1, newK - 1, verticesUp, adjListsUp) == true)
+    {
         return true;
     }
 
     /**
      * Generates the upper branch: Assumes N(a) is in the vertex cover.
      */
-    std::vector<bool>removed(sG.n, false);
-    std::vector<vertex>verticesDown(sG.n - 1 - sG.vertices[a].degree);
-    std::vector<std::vector<int> >adjListsDown(sG.n - 1 - sG.vertices[a].degree);
+    std::vector<bool> removed(sG.n, false);
+    std::vector<vertex> verticesDown(sG.n - 1 - sG.vertices[a].degree);
+    std::vector<std::vector<int>> adjListsDown(sG.n - 1 - sG.vertices[a].degree);
     removed[a] = true;
 
-    for (std::vector<int>::iterator current = sG.adjLists[a].begin(); current != sG.adjLists[a].end(); current++) {
+    for (std::vector<int>::iterator current = sG.adjLists[a].begin(); current != sG.adjLists[a].end(); current++)
+    {
         removed[*current] = true;
     }
 
     count = 0;
-    std::vector<int>mask(sG.n);
+    std::vector<int> mask(sG.n);
 
-    for (int i = 0; i < sG.n; i++) {
+    for (int i = 0; i < sG.n; i++)
+    {
         vertex v = sG.vertices[i];
 
-        if (removed[v.pos] == false) {
+        if (removed[v.pos] == false)
+        {
             verticesDown[count].v = v.v;
             verticesDown[count].degree = 0;
             verticesDown[count].pos = count;
@@ -469,12 +531,16 @@ bool VertexCover::kVertexCover(
         }
     }
 
-    for (int i = 0; i < sG.n; i++) {
+    for (int i = 0; i < sG.n; i++)
+    {
         vertex v = sG.vertices[i];
 
-        if (removed[v.pos] == false) {
-            for (std::vector<int>::iterator current = sG.adjLists[v.pos].begin(); current != sG.adjLists[v.pos].end(); current++) {
-                if (removed[*current] == false) {
+        if (removed[v.pos] == false)
+        {
+            for (std::vector<int>::iterator current = sG.adjLists[v.pos].begin(); current != sG.adjLists[v.pos].end(); current++)
+            {
+                if (removed[*current] == false)
+                {
                     adjListsDown[mask[v.pos]].push_back(mask[*current]);
                     verticesDown[mask[v.pos]].degree++;
                 }

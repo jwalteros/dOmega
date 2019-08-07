@@ -34,7 +34,8 @@
 #include <vector>
 #include "Graph.h"
 
-class VertexCover {
+class VertexCover
+{
 public:
     /**
      * Default constructor.
@@ -64,10 +65,10 @@ public:
     int degreePreprocessing(
         int n,
         int k,
-        std::vector<vertex>& vertices,
-        std::vector<std::vector<int> >& adjLists,
-        int& newK,
-        subgraph& kernel);
+        std::vector<vertex> &vertices,
+        std::vector<std::vector<int>> &adjLists,
+        int &newK,
+        subgraph &kernel);
 
     /**
      * Given a set of vertices that are marked as removed, produces the
@@ -83,11 +84,11 @@ public:
      */
     void subgraphUpdate(
         int n,
-        int& numRemoved,
-        std::vector<vertex>& vertices,
-        std::vector<std::vector<int> >& adjLists,
-        std::vector<bool>& removed,
-        subgraph& kernel);
+        int &numRemoved,
+        std::vector<vertex> &vertices,
+        std::vector<std::vector<int>> &adjLists,
+        std::vector<bool> &removed,
+        subgraph &kernel);
 
     /**
      * kVertexCover:
@@ -113,7 +114,7 @@ public:
     bool kVertexCover(
         int n,
         int k,
-        std::vector<vertex>& vertices,
-        std::vector<std::vector<int> >& adjLists);
+        std::vector<vertex> &vertices,
+        std::vector<std::vector<int>> &adjLists);
 };
 #endif // _VERTEXCOVER_H_
