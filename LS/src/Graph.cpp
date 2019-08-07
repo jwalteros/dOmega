@@ -443,33 +443,74 @@ void Graph::generateCompGraphRightNeighbors(
      *
      * Since the adjacency lists are sorted, this can be done by binary search.
      */
-    int largestDegree = 0;
+     int largestDegree = 0;
 
-    for (std::vector<vertex>::iterator i = subgraphs[v].vertices.begin(); i < subgraphs[v].vertices.end(); i++) {
-        for (std::vector<vertex>::iterator j = i + 1; j < subgraphs[v].vertices.end(); j++) {
-            if (position[i->v] < position[j->v]) {
-                if (!std::binary_search(subgraphs[i->v].vertices.begin() + 1, subgraphs[i->v].vertices.end(), *j)) {
-                    subgraphs[v].adjLists[i->pos].push_back(j->pos);
-                    subgraphs[v].adjLists[j->pos].push_back(i->pos);
-                    i->degree++;
-                    j->degree++;
-                    subgraphs[v].m++;
-                }
-            } else {
-                if (!std::binary_search(subgraphs[j->v].vertices.begin() + 1, subgraphs[j->v].vertices.end(), *i)) {
-                    subgraphs[v].adjLists[i->pos].push_back(j->pos);
-                    subgraphs[v].adjLists[j->pos].push_back(i->pos);
-                    i->degree++;
-                    j->degree++;
-                    subgraphs[v].m++;
-                }
-            }
-        }
+     std::vector<std::vector<bool>> incMat(subgraphs[v].n, std::vector<bool>(subgraphs[v].n, false));
 
-        if (i->degree > largestDegree) {
-            subgraphs[v].largestDegreeVertex = i->pos;
-        }
-    }
+     for (std::vector<vertex>::iterator i = subgraphs[v].vertices.begin() + 1; i < subgraphs[v].vertices.end(); i++)
+     {
+         std::vector<vertex>::iterator current1 = subgraphs[v].vertices.begin() + 1;
+         std::vector<vertex>::iterator current2 = subgraphs[i->v].vertices.begin() + 1;
+         while (current1 != subgraphs[v].vertices.end() && current2 != subgraphs[i->v].vertices.end())
+         {
+             if (current2->v < current1->v)
+             {
+                 current2++;
+                 continue;
+             }
+             if (current1->v == current2->v)
+             {
+                 current1++;
+                 current2++;
+                 continue;
+             }
+             if (current1->v == i->v)
+             {
+                 current1++;
+                 continue;
+             }
+             if (current1->v < current2->v)
+             {
+                 if (position[i->v] < position[current1->v])
+                 {
+                     incMat[i->pos][current1->pos] = true;
+                     incMat[current1->pos][i->pos] = true;
+                     i->degree++;
+                     current1->degree++;
+                     subgraphs[v].m++;
+                 }
+                 current1++;
+                 continue;
+             }
+         }
+         while (current1 != subgraphs[v].vertices.end())
+         {
+             if (position[i->v] < position[current1->v])
+             {
+                 incMat[i->pos][current1->pos] = true;
+                 incMat[current1->pos][i->pos] = true;
+                 i->degree++;
+                 current1->degree++;
+                 subgraphs[v].m++;
+             }
+             current1++;
+             continue;
+         }
+         if (i->degree > largestDegree)
+         {
+             subgraphs[v].largestDegreeVertex = i->pos;
+         }
+     }
+     for (std::vector<vertex>::iterator i = subgraphs[v].vertices.begin() + 1; i < subgraphs[v].vertices.end(); i++)
+     {
+         for (int j = 1; j < subgraphs[v].n; j++)
+         {
+             if (incMat[i->pos][j])
+             {
+                 subgraphs[v].adjLists[i->pos].push_back(j);
+             }
+         }
+     }
 }
 
 void Graph::print() {

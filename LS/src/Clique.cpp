@@ -36,26 +36,30 @@
 #include "VertexCover.h"
 
 void processSubgraphs(
-    Graph& graph,
-    std::vector<int>& sortedList,
-    std::vector<subgraph>& subgraphs,
-    std::atomic<bool>& cliqueFlag,
+    Graph &graph,
+    std::vector<int> &sortedList,
+    std::vector<subgraph> &subgraphs,
+    std::atomic<bool> &cliqueFlag,
     int threadNumber,
     int numberOfThreads,
-    int clq) {
+    int clq)
+{
     VertexCover VC;
     int i = threadNumber;
 
-    while (!cliqueFlag && i < graph.n) {
+    while (!cliqueFlag && i < graph.n)
+    {
         int v = sortedList[i];
 
         int k = graph.rightDegree[v] + 1 - clq;
 
-        if (k >= 0) {
+        if (k >= 0)
+        {
             /**
              * If the subgraph of vertex v has not been created, it does it.
              */
-            if (subgraphs[v].created == false) {
+            if (subgraphs[v].created == false)
+            {
                 graph.generateCompGraphRightNeighbors(v, subgraphs);
             }
 
@@ -67,12 +71,14 @@ void processSubgraphs(
             int highDegVertices = 0;
             int success = BusKernel.getKernel(kernel, highDegVertices);
 
-            if (success == -1) {
+            if (success == -1)
+            {
                 i += numberOfThreads;
                 continue;
             }
 
-            if (success == 1) {
+            if (success == 1)
+            {
                 cliqueFlag = true;
                 break;
             }
@@ -88,27 +94,31 @@ void processSubgraphs(
             NemhauserTrotter NT(&kernel, k);
             success = NT.getKernel(kernel2, numRemoved, numInVC);
 
-            if (success == -1) {
+            if (success == -1)
+            {
                 i += numberOfThreads;
                 continue;
             }
 
-            if (success == 1) {
+            if (success == 1)
+            {
                 cliqueFlag = true;
                 break;
             }
 
             k = k - numInVC;
 
-
             /**
              * Solves the resulting k vertex cover problem.
              */
-            if (VC.kVertexCover(kernel2.n, k, kernel2.vertices, kernel2.adjLists)) {
+            if (VC.kVertexCover(kernel2.n, k, kernel2.vertices, kernel2.adjLists))
+            {
                 cliqueFlag = true;
                 break;
             }
-        } else {
+        }
+        else
+        {
             break;
         }
         i += numberOfThreads;
@@ -116,54 +126,62 @@ void processSubgraphs(
 }
 
 Clique::Clique(
-    Graph& graph,
-    const int numThreads) : graph(graph) {
+    Graph &graph,
+    const int numThreads) : graph(graph)
+{
     this->numThreads = numThreads;
 }
 
-int Clique::findMaxClique() {
+int Clique::findMaxClique()
+{
     subgraphs = std::vector<subgraph>(graph.n);
     std::chrono::high_resolution_clock::time_point begin_time = std::chrono::high_resolution_clock::now();
     graph.degeneracyOrdering(subgraphs);
     cliqueUB = graph.cliqueUB;
     cliqueLB = graph.cliqueLB;
     std::chrono::high_resolution_clock::time_point end_time = std::chrono::high_resolution_clock::now();
-    degeneracyTime = std::chrono::duration_cast<std::chrono::duration<double> >(end_time - begin_time);
+    degeneracyTime = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - begin_time);
 
     /**
      * If the upper and lower bounds are different, the vertices are sorted
      * based on their right degree
      */
 
-    if (cliqueLB < cliqueUB) {
+    if (cliqueLB < cliqueUB)
+    {
         sortedList = std::vector<int>(graph.n);
-        std::vector<int>buckets(graph.d + 1, 0);
+        std::vector<int> buckets(graph.d + 1, 0);
 
-        for (int i = 0; i < graph.n; i++) {
+        for (int i = 0; i < graph.n; i++)
+        {
             buckets[graph.rightDegree[i]]++;
         }
 
         int temp;
         int count = 0;
 
-        for (int k = graph.d; k >= 0; k--) {
-            temp       = buckets[k];
+        for (int k = graph.d; k >= 0; k--)
+        {
+            temp = buckets[k];
             buckets[k] = count;
-            count     += temp;
+            count += temp;
         }
 
-        for (int i = 0; i < graph.n; i++) {
+        for (int i = 0; i < graph.n; i++)
+        {
             sortedList[buckets[graph.rightDegree[i]]] = i;
             buckets[graph.rightDegree[i]]++;
         }
 
         int clq = cliqueUB;
-        std::vector<std::thread>threads(numThreads);
+        std::vector<std::thread> threads(numThreads);
 
-        while (cliqueLB < cliqueUB) {
+        while (cliqueLB < cliqueUB)
+        {
             cliqueFlag = false;
 
-            for (int i = 0; i < numThreads; i++) {
+            for (int i = 0; i < numThreads; i++)
+            {
                 std::thread th(&processSubgraphs,
                                std::ref(graph),
                                std::ref(sortedList),
@@ -175,21 +193,24 @@ int Clique::findMaxClique() {
                 threads[i] = std::move(th);
             }
 
-
-            for (std::thread& th : threads) {
+            for (std::thread &th : threads)
+            {
                 th.join();
             }
 
-            if (cliqueFlag) {
+            if (cliqueFlag)
+            {
                 cliqueLB = clq;
-            } else {
+            }
+            else
+            {
                 cliqueUB = clq - 1;
             }
             clq = cliqueUB;
         }
     }
-    end_time  = std::chrono::high_resolution_clock::now();
-    runningTime = std::chrono::duration_cast<std::chrono::duration<double> >(end_time - begin_time);
+    end_time = std::chrono::high_resolution_clock::now();
+    runningTime = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - begin_time);
 
     std::clog << "Number of threads used: " << numThreads << "\n";
     std::clog << "Degeneracy: " << graph.d << "\n";

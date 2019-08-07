@@ -28,47 +28,48 @@
 #include "Graph.h"
 #include "VertexCover.h"
 
-class NemhauserTrotter {
+class NemhauserTrotter
+{
 public:
-    subgraph* sG; /**< Subgraph to be processed.*/
-    int k; /**< Expected size of the VC.*/
+    subgraph *sG; /**< Subgraph to be processed.*/
+    int k;        /**< Expected size of the VC.*/
 
     /**
      *  Data for the bipartite matching algorithm (Hopcroft-Karp)
      */
-    std::vector<int>matchL; /**< Match of the vertices in the left set. */
-    std::vector<int>matchR; /**< Match of the vertices in the right set. */
+    std::vector<int> matchL; /**< Match of the vertices in the left set. */
+    std::vector<int> matchR; /**< Match of the vertices in the right set. */
 
     /**
      * Data for the strongly connected components algorithm (Tarjan).
      */
-    int index; /**< Discover time counter. */
-    std::vector<bool>onStack; /**< Is v still in the stack? */
-    std::vector<int>indices; /**< Discovery time of v. */
-    std::vector<int>lowLink; /**< the smallest index of any vertex known to be
+    int index;                 /**< Discover time counter. */
+    std::vector<bool> onStack; /**< Is v still in the stack? */
+    std::vector<int> indices;  /**< Discovery time of v. */
+    std::vector<int> lowLink;  /**< the smallest index of any vertex known to be
                               * reachable from v, including v itself. */
-    std::stack<int>S; /**< Stack of vertices. */
+    std::stack<int> S;         /**< Stack of vertices. */
 
     /**
      * Strongly connected component data
      */
-    std::vector<int>componentMap; /**< SSC that contains v. */
-    std::vector<std::vector<int> >components; /**< Vertices that are in S. */
-    std::vector<int>vertexMap; /**< Map used to check if both the left and right
+    std::vector<int> componentMap;            /**< SSC that contains v. */
+    std::vector<std::vector<int>> components; /**< Vertices that are in S. */
+    std::vector<int> vertexMap;               /**< Map used to check if both the left and right
                                 * copies of v are covered by the same SCC. */
-    std::vector<bool>toBeRemoved; /**< If the S can be removed(V(S_L) \cap v(S_R)
+    std::vector<bool> toBeRemoved;            /**< If the S can be removed(V(S_L) \cap v(S_R)
                                    * = \emptyset). */
-    int numComponents; /**< Number of SCC. */
+    int numComponents;                        /**< Number of SCC. */
 
     /*
      * Data required for producing the kernel
      */
-    std::vector<std::vector<int> >adjListsComp;  /**< Anti-adjacency lists. Nodes
+    std::vector<std::vector<int>> adjListsComp; /**< Anti-adjacency lists. Nodes
                                                   * connected to v. */
-    std::vector<int>compOutDegree; /**< outdegree of component p. */
-    std::vector<int>connected; /**< This map is used to check if and arc between
+    std::vector<int> compOutDegree;             /**< outdegree of component p. */
+    std::vector<int> connected;                 /**< This map is used to check if and arc between
                                 * two components already exists. */
-    std::vector<bool>compRemoved; /**< If component p has been removed during the
+    std::vector<bool> compRemoved;              /**< If component p has been removed during the
                                    * kernel generation. */
 
     /**
@@ -78,8 +79,9 @@ public:
      * @param[in] k : Expected size of the VC.
      */
     inline NemhauserTrotter(
-        subgraph* sG,
-        int       k) {
+        subgraph *sG,
+        int k)
+    {
         this->sG = sG;
         this->k = k;
         matchL = std::vector<int>(sG->n, -1);
@@ -96,10 +98,9 @@ public:
      * subgraph,and 0 if there could be a VC in the subgraph.
      */
     int getKernel(
-        subgraph& kernel,
-        int& numRemoved,
-        int& numInVC
-        );
+        subgraph &kernel,
+        int &numRemoved,
+        int &numInVC);
 
     /**
      * Hopcroft-Karp procedure: Finds a maximum matching of bipartite graphs. It
@@ -111,15 +112,15 @@ public:
      */
     void HopcroftKarp();
     bool BFS(
-        std::vector<int>&,
-        std::queue<int>&,
-        int&);
+        std::vector<int> &,
+        std::queue<int> &,
+        int &);
 
     bool DFS(
         int,
-        std::vector<int>&,
-        std::queue<int>&,
-        int&);
+        std::vector<int> &,
+        std::queue<int> &,
+        int &);
 
     /**
      * Tarjan procedure: Finds the strongly connected components of the residual

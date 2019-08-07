@@ -31,10 +31,11 @@
 #include <iostream>
 #include "Graph.h"
 
-class Buss {
+class Buss
+{
 public:
-    subgraph* sG; /**< Subgraph to be processed.*/
-    int k; /**< Expected size of the VC.*/
+    subgraph *sG; /**< Subgraph to be processed.*/
+    int k;        /**< Expected size of the VC.*/
 
     /**
      * Buss constructor: Receives the graph to be processed and the expected VC
@@ -43,8 +44,9 @@ public:
      * @param[in] k : Expected size of the VC.
      */
     inline Buss(
-        subgraph* sG,
-        int k) {
+        subgraph *sG,
+        int k)
+    {
         this->sG = sG;
         this->k = k;
     }
@@ -58,7 +60,7 @@ public:
      * subgraph and 0 if there could be a VC in the subgraph.
      */
     int getKernel(
-        subgraph& kernel,
-        int& highDegVertices);
+        subgraph &kernel,
+        int &highDegVertices);
 };
 #endif // ifndef _BUSS_H_
