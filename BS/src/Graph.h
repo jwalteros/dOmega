@@ -146,6 +146,13 @@ public:
         std::vector<subgraph> &sG);
 
     /**
+     * In order to reduce the memory consumption, this method clears the vectors 
+     * that are not required for finding max clique after the degeneracy ordering 
+     * is computed.
+     */
+    void clearElements();
+
+    /**
      * Prints the full description of the graph:
      *
      * <name n m delta Delta>

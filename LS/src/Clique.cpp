@@ -51,7 +51,7 @@ void processSubgraphs(
     {
         int v = sortedList[i];
 
-        int k = graph.rightDegree[v] + 1 - clq;
+        int k = subgraphs[v].n + 1 - clq;
 
         if (k >= 0)
         {
@@ -175,6 +175,7 @@ int Clique::findMaxClique()
 
         int clq = cliqueUB;
         std::vector<std::thread> threads(numThreads);
+        graph.clearElements();
 
         while (cliqueLB < cliqueUB)
         {

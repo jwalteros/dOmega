@@ -570,6 +570,16 @@ void Graph::generateCompGraphRightNeighbors(
     }
 }
 
+void Graph::clearElements()
+{
+    std::vector<int>().swap(EdgeTo);
+    std::vector<int>().swap(EdgesBegin);
+    std::vector<int>().swap(degree);
+    std::vector<int>().swap(alias);
+    std::vector<int>().swap(rightDegree);
+    std::vector<int>().swap(ordering);
+}
+
 void Graph::print()
 {
     printShort();
