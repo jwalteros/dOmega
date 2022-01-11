@@ -45,21 +45,13 @@ int Buss::getKernel(
      * Marks the vertices that will be removed based on their degree. If deg(i)>
      * @param k, mark the vertex as removed.
      */
-    bool change = true;
 
-    while (change && highDegVertices <= k)
+    for (std::vector<vertex>::iterator i = sG->vertices.begin(); i < sG->vertices.end() && highDegVertices <= k; i++)
     {
-        change = false;
-
-        for (std::vector<vertex>::iterator i = sG->vertices.begin(); i < sG->vertices.end() && highDegVertices <= k; i++)
-        {
-            if (i->degree > k - highDegVertices)
-            {
-                removed[i->pos] = true;
-                highDegVertices++;
-                numRemoved++;
-                change = true;
-            }
+        if (i->degree > k) {
+            removed[i->pos] = true;
+            highDegVertices++;
+            numRemoved++;
         }
     }
 

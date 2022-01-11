@@ -84,7 +84,7 @@ To find the size of the maximum clique of a graph use:
 
 		# Finds the size of the maximum clique of the graph described by
 		# edge list file testEdge.txt 3 processors
-		./dOmega -e ../dat/testEdge.txt -k 3
+		./dOmega -e ../dat/testEdge.txt -m 3
 
 Terms and conditions
 --------------------

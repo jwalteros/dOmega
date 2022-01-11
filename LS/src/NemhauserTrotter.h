@@ -32,7 +32,7 @@ class NemhauserTrotter
 {
 public:
     subgraph *sG; /**< Subgraph to be processed.*/
-    int k;        /**< Expected size of the VC.*/
+    int k; /**< Expected size of the VC.*/
 
     /**
      *  Data for the bipartite matching algorithm (Hopcroft-Karp)
@@ -43,34 +43,34 @@ public:
     /**
      * Data for the strongly connected components algorithm (Tarjan).
      */
-    int index;                 /**< Discover time counter. */
+    int index; /**< Discover time counter. */
     std::vector<bool> onStack; /**< Is v still in the stack? */
-    std::vector<int> indices;  /**< Discovery time of v. */
-    std::vector<int> lowLink;  /**< the smallest index of any vertex known to be
-                              * reachable from v, including v itself. */
-    std::stack<int> S;         /**< Stack of vertices. */
+    std::vector<int> indices; /**< Discovery time of v. */
+    std::vector<int> lowLink; /**< the smallest index of any vertex known to be
+    * reachable from v, including v itself. */
+    std::stack<int> S; /**< Stack of vertices. */
 
     /**
      * Strongly connected component data
      */
-    std::vector<int> componentMap;            /**< SSC that contains v. */
-    std::vector<std::vector<int>> components; /**< Vertices that are in S. */
-    std::vector<int> vertexMap;               /**< Map used to check if both the left and right
-                                * copies of v are covered by the same SCC. */
-    std::vector<bool> toBeRemoved;            /**< If the S can be removed(V(S_L) \cap v(S_R)
-                                   * = \emptyset). */
-    int numComponents;                        /**< Number of SCC. */
+    std::vector<int> componentMap; /**< SSC that contains v. */
+    std::vector<std::vector<int> > components; /**< Vertices that are in S. */
+    std::vector<int> vertexMap; /**< Map used to check if both the left and right
+    * copies of v are covered by the same SCC. */
+    std::vector<bool> toBeRemoved; /**< If the S can be removed(V(S_L) \cap v(S_R)
+    * = \emptyset). */
+    int numComponents; /**< Number of SCC. */
 
     /*
      * Data required for producing the kernel
      */
-    std::vector<std::vector<int>> adjListsComp; /**< Anti-adjacency lists. Nodes
+    std::vector<std::vector<int> > adjListsComp; /**< Anti-adjacency lists. Nodes
                                                   * connected to v. */
-    std::vector<int> compOutDegree;             /**< outdegree of component p. */
-    std::vector<int> connected;                 /**< This map is used to check if and arc between
-                                * two components already exists. */
-    std::vector<bool> compRemoved;              /**< If component p has been removed during the
-                                   * kernel generation. */
+    std::vector<int> compOutDegree; /**< outdegree of component p. */
+    std::vector<int> connected; /**< This map is used to check if and arc between
+    * two components already exists. */
+    std::vector<bool> compRemoved; /**< If component p has been removed during the
+    * kernel generation. */
 
     /**
      * NemhauserTrotter constructor: Receives the graph to be processed and the

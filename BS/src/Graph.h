@@ -32,9 +32,9 @@
  */
 struct vertex
 {
-    int v;      /**< Vertex name */
+    int v; /**< Vertex name */
     int degree; /**< Vertex's degree */
-    int pos;    /**< Position of the vertex in the vector of vertices */
+    int pos; /**< Position of the vertex in the vector of vertices */
 
     /**
      * Comparator
@@ -50,41 +50,43 @@ struct vertex
  */
 struct subgraph
 {
-    int n;                                  /**< Number of vertices in the subgraph */
-    int m;                                  /**< Number of edges in the subgraph */
-    bool created = false;                   /**< Whether the subgraph is empty*/
-    std::vector<vertex> vertices;           /**< Set of vertices of the subgraph */
-    std::vector<std::vector<int>> adjLists; /**< Adj. lists of the vertices */
-    int largestDegreeVertex;                /**< Index of the vertex with the largest degree */
+    int n; /**< Number of vertices in the subgraph */
+    int m; /**< Number of edges in the subgraph */
+    bool created = false; /**< Whether the subgraph is empty*/
+    int LB; /**< lower bound on the max clique value*/
+    int UB; /**< upper bound on the max clique value*/
+    std::vector<vertex> vertices; /**< Set of vertices of the subgraph */
+    std::vector<std::vector<int> > adjLists; /**< Adj. lists of the vertices */
+    int largestDegreeVertex; /**< Index of the vertex with the largest degree */
 };
 
 class Graph
 {
 public:
-    const char *name;                       /**< Graph's name (filename) */
-    int n;                                  /**< Number of vertices in G */
-    int m;                                  /**< Number of edges in G*/
-    int delta;                              /**< Min degree */
-    int Delta;                              /**< Max degree */
-    std::vector<int> EdgeTo;                /**< Vector that contains the adjacency list of each
-                             * Vertex. The lists are appended one after the other */
-    std::vector<int> EdgesBegin;            /**< The position of the first neighbor of each vertex */
-    std::vector<int> degree;                /**< Degree of the vertices */
-    std::vector<int> alias;                 /**< Name of the vertices */
+    const char *name; /**< Graph's name (filename) */
+    int n; /**< Number of vertices in G */
+    int m; /**< Number of edges in G*/
+    int delta; /**< Min degree */
+    int Delta; /**< Max degree */
+    std::vector<int> EdgeTo; /**< Vector that contains the adjacency list of each
+    * Vertex. The lists are appended one after the other */
+    std::vector<int> EdgesBegin; /**< The position of the first neighbor of each vertex */
+    std::vector<int> degree; /**< Degree of the vertices */
+    std::vector<int> alias; /**< Name of the vertices */
     std::chrono::duration<double> readTime; /**< ReadingTime */
 
     /*
      * Members generated after the degeneray ordering is calculated
      */
-    int d;                        /**<  Degeneracy value */
-    int cliqueLB;                 /**< Clique size given by the degeneracy ordering. Obtained when the
-                   * rightDegree of a vertex equals to the number of vertices to the right
-                   * in the degeneracy ordering */
-    int cliqueUB;                 /**< Upper bound on the clique. Is d+1 normally, but will be set to d if the
+    int d; /**<  Degeneracy value */
+    int cliqueLB; /**< Clique size given by the degeneracy ordering. Obtained when the
+    * rightDegree of a vertex equals to the number of vertices to the right
+    * in the degeneracy ordering */
+    int cliqueUB; /**< Upper bound on the clique. Is d+1 normally, but will be set to d if the
                    * d-core is d-regular but does not have a component of size d*/
     std::vector<int> rightDegree; /**<  Number of neighbors to the right in the ordering */
-    std::vector<int> ordering;    /**< Degeneracy ordering */
-    std::vector<int> position;    /**< Position of the vertices in the ordering */
+    std::vector<int> ordering; /**< Degeneracy ordering */
+    std::vector<int> position; /**< Position of the vertices in the ordering */
 
     /**
      * Default constructor.

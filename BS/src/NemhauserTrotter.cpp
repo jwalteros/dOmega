@@ -11,7 +11,7 @@
  * @author Jose L. Walteros
  *
  * @version   1.0
- * @date      January 2018
+ * @date      June 2018
  *
  * Copyright (C) 2018 Jose L. Walteros. All rights reserved.
  *
@@ -39,7 +39,7 @@ int NemhauserTrotter::getKernel(
      * if there is an arc whose tail and head are in k1 and k2, respectively.
      */
     int n = sG->n;
-    adjListsComp = std::vector<std::vector<int>>(numComponents);
+    adjListsComp = std::vector<std::vector<int> >(numComponents);
     compOutDegree = std::vector<int>(numComponents, 0);
     connected = std::vector<int>(numComponents, -1);
 

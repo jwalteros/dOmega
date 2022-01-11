@@ -23,7 +23,7 @@
  * @author Jose L. Walteros
  *
  * @version   1.0
- * @date      January 2018
+ * @date      June 2018
  *
  * Copyright (C) 2018 Jose L. Walteros. All rights reserved.
  *
@@ -66,7 +66,7 @@ public:
         int n,
         int k,
         std::vector<vertex> &vertices,
-        std::vector<std::vector<int>> &adjLists,
+        std::vector<std::vector<int> > &adjLists,
         int &newK,
         subgraph &kernel);
 
@@ -86,7 +86,7 @@ public:
         int n,
         int &numRemoved,
         std::vector<vertex> &vertices,
-        std::vector<std::vector<int>> &adjLists,
+        std::vector<std::vector<int> > &adjLists,
         std::vector<bool> &removed,
         subgraph &kernel);
 
@@ -115,6 +115,6 @@ public:
         int n,
         int k,
         std::vector<vertex> &vertices,
-        std::vector<std::vector<int>> &adjLists);
+        std::vector<std::vector<int> > &adjLists);
 };
 #endif // _VERTEXCOVER_H_

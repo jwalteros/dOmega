@@ -67,7 +67,12 @@ int main(int argc, const char *argv[])
                 Clique clique(graph, numThreads);
                 clique.findMaxClique();
 
-                output << filename << " " << graph.n << " " << graph.m << " " << graph.delta << " " << graph.Delta << " " << graph.readTime.count() << " " << graph.d << " " << graph.cliqueLB << " " << clique.degeneracyTime.count() << " " << clique.cliqueUB << " " << clique.runningTime.count() << " " << numThreads << "\n";
+                output << filename << " " << graph.n << " " << graph.m << " " <<
+                graph.delta << " " << graph.Delta << " " <<
+                graph.readTime.count() << " " << graph.d << " " <<
+                graph.cliqueLB << " " << clique.degeneracyTime.count() << " " <<
+                clique.cliqueUB << " " << clique.runningTime.count() << " " <<
+                numThreads << "\n";
 
                 std::cout << output.str();
             }

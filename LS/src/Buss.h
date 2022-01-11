@@ -35,7 +35,7 @@ class Buss
 {
 public:
     subgraph *sG; /**< Subgraph to be processed.*/
-    int k;        /**< Expected size of the VC.*/
+    int k; /**< Expected size of the VC.*/
 
     /**
      * Buss constructor: Receives the graph to be processed and the expected VC

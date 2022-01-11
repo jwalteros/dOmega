@@ -31,6 +31,11 @@
 # Executables
 *.exe
 *.app
+testBS.out
+testOther-BS.sh
+testOther-LS.out
+testOther-LS.sh
+testOther.out
 
 ### OSX ###
 *.DS_Store
@@ -63,5 +68,8 @@ Temporary Items
 
 # Other directories
 bin
-
+Instances
+.vscode/
+BS/.vscode/
+LS/.vscode/
 # End of https://www.gitignore.io/api/osx,c++

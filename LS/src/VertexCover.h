@@ -66,7 +66,7 @@ public:
         int n,
         int k,
         std::vector<vertex> &vertices,
-        std::vector<std::vector<int>> &adjLists,
+        std::vector<std::vector<int> > &adjLists,
         int &newK,
         subgraph &kernel);
 
@@ -86,7 +86,7 @@ public:
         int n,
         int &numRemoved,
         std::vector<vertex> &vertices,
-        std::vector<std::vector<int>> &adjLists,
+        std::vector<std::vector<int> > &adjLists,
         std::vector<bool> &removed,
         subgraph &kernel);
 
@@ -115,6 +115,7 @@ public:
         int n,
         int k,
         std::vector<vertex> &vertices,
-        std::vector<std::vector<int>> &adjLists);
+        std::vector<std::vector<int> > &adjLists);
+
 };
 #endif // _VERTEXCOVER_H_

@@ -23,7 +23,7 @@
  * @author Jose L. Walteros
  *
  * @version   1.0
- * @date      January 2018
+ * @date      June 2018
  *
  * Copyright (C) 2018 Jose L. Walteros. All rights reserved.
  *
@@ -38,7 +38,7 @@ int VertexCover::degreePreprocessing(
     int n,
     int k,
     std::vector<vertex> &vertices,
-    std::vector<std::vector<int>> &adjLists,
+    std::vector<std::vector<int> > &adjLists,
     int &newK,
     subgraph &kernel)
 {
@@ -62,7 +62,7 @@ int VertexCover::degreePreprocessing(
         /**
          * Mark the vertices that will be removed based on their degree.
          */
-        for (std::vector<vertex>::iterator i = vertices.begin(); i < vertices.begin() + n && newK >= 0; i++)
+        for (std::vector<vertex>::iterator i = vertices.begin(); i < vertices.begin() + n; i++)
         {
             /**
              * If i has degree > new K.
@@ -363,7 +363,7 @@ void VertexCover::subgraphUpdate(
     int n,
     int &numRemoved,
     std::vector<vertex> &vertices,
-    std::vector<std::vector<int>> &adjLists,
+    std::vector<std::vector<int> > &adjLists,
     std::vector<bool> &removed,
     subgraph &sG)
 {
@@ -378,7 +378,7 @@ void VertexCover::subgraphUpdate(
     sG.n = n - numRemoved;
     sG.m = 0;
     sG.vertices = std::vector<vertex>(n - numRemoved);
-    sG.adjLists = std::vector<std::vector<int>>(n - numRemoved);
+    sG.adjLists = std::vector<std::vector<int> >(n - numRemoved);
     int count = 0;
 
     for (int i = 0; i < n; i++)
@@ -433,7 +433,7 @@ bool VertexCover::kVertexCover(
     int n,
     int k,
     std::vector<vertex> &vertices,
-    std::vector<std::vector<int>> &adjLists)
+    std::vector<std::vector<int> > &adjLists)
 {
     /**
      * Creates tha kernel based on the procedure that preprocess that vertices
@@ -442,7 +442,7 @@ bool VertexCover::kVertexCover(
     subgraph sG;
 
     sG.vertices = std::vector<vertex>(n);
-    sG.adjLists = std::vector<std::vector<int>>(n);
+    sG.adjLists = std::vector<std::vector<int> >(n);
     sG.n = 0;
     int newK = 0;
     int success = degreePreprocessing(n, k, vertices, adjLists, newK, sG);
@@ -462,7 +462,7 @@ bool VertexCover::kVertexCover(
      */
     int a = sG.largestDegreeVertex;
     std::vector<vertex> verticesUp(sG.n - 1);
-    std::vector<std::vector<int>> adjListsUp(sG.n - 1);
+    std::vector<std::vector<int> > adjListsUp(sG.n - 1);
     int count = 0;
 
     for (int i = 0; i < sG.n; i++)
@@ -504,7 +504,7 @@ bool VertexCover::kVertexCover(
      */
     std::vector<bool> removed(sG.n, false);
     std::vector<vertex> verticesDown(sG.n - 1 - sG.vertices[a].degree);
-    std::vector<std::vector<int>> adjListsDown(sG.n - 1 - sG.vertices[a].degree);
+    std::vector<std::vector<int> > adjListsDown(sG.n - 1 - sG.vertices[a].degree);
     removed[a] = true;
 
     for (std::vector<int>::iterator current = sG.adjLists[a].begin(); current != sG.adjLists[a].end(); current++)

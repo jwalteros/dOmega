@@ -30,7 +30,8 @@
  * vertex structure. The name of the vertex is generaly different to its
  * possition in the vertex list.
  */
-struct vertex {
+struct vertex
+{
     int v; /**< Vertex name */
     int degree; /**< Vertex's degree */
     int pos; /**< Position of the vertex in the vector of vertices */
@@ -38,7 +39,8 @@ struct vertex {
     /**
      * Comparator
      */
-    friend bool operator<(const vertex& x, const vertex& y) {
+    friend bool operator<(const vertex &x, const vertex &y)
+    {
         return x.v < y.v;
     }
 };
@@ -46,41 +48,45 @@ struct vertex {
 /**
  * subgraph structure.
  */
-struct subgraph {
+struct subgraph
+{
     int n; /**< Number of vertices in the subgraph */
     int m; /**< Number of edges in the subgraph */
     bool created = false; /**< Whether the subgraph is empty*/
-    std::vector<vertex>vertices; /**< Set of vertices of the subgraph */
-    std::vector<std::vector<int> >adjLists; /**< Adj. lists of the vertices */
+    int LB; /**< lower bound on the max clique value*/
+    int UB; /**< upper bound on the max clique value*/
+    std::vector<vertex> vertices; /**< Set of vertices of the subgraph */
+    std::vector<std::vector<int> > adjLists; /**< Adj. lists of the vertices */
     int largestDegreeVertex; /**< Index of the vertex with the largest degree */
 };
 
-class Graph {
+class Graph
+{
 public:
-    const char* name; /**< Graph's name (filename) */
+    const char *name; /**< Graph's name (filename) */
     int n; /**< Number of vertices in G */
     int m; /**< Number of edges in G*/
     int delta; /**< Min degree */
     int Delta; /**< Max degree */
-    std::vector<int>EdgeTo; /**< Vector that contains the adjacency list of each
-                             * Vertex. The lists are appended one after the other */
-    std::vector<int>EdgesBegin;  /**< The position of the first neighbor of each vertex */
-    std::vector<int>degree; /**< Degree of the vertices */
-    std::vector<int>alias; /**< Name of the vertices */
-    std::chrono::duration<double>readTime; /**< ReadingTime */
+    std::vector<int> EdgeTo; /**< Vector that contains the adjacency list of each
+    * Vertex. The lists are appended one after the other */
+    std::vector<int> EdgesBegin; /**< The position of the first neighbor of each vertex */
+    std::vector<int> degree; /**< Degree of the vertices */
+    std::vector<int> alias; /**< Name of the vertices */
+    std::chrono::duration<double> readTime; /**< ReadingTime */
 
     /*
      * Members generated after the degeneray ordering is calculated
      */
     int d; /**<  Degeneracy value */
     int cliqueLB; /**< Clique size given by the degeneracy ordering. Obtained when the
-                   * rightDegree of a vertex equals to the number of vertices to the right
-                   * in the degeneracy ordering */
+    * rightDegree of a vertex equals to the number of vertices to the right
+    * in the degeneracy ordering */
     int cliqueUB; /**< Upper bound on the clique. Is d+1 normally, but will be set to d if the
                    * d-core is d-regular but does not have a component of size d*/
-    std::vector<int>rightDegree; /**<  Number of neighbors to the right in the ordering */
-    std::vector<int>ordering; /**< Degeneracy ordering */
-    std::vector<int>position; /**< Position of the vertices in the ordering */
+    std::vector<int> rightDegree; /**<  Number of neighbors to the right in the ordering */
+    std::vector<int> ordering; /**< Degeneracy ordering */
+    std::vector<int> position; /**< Position of the vertices in the ordering */
 
     /**
      * Default constructor.
@@ -103,9 +109,9 @@ public:
      * @param[in] filename : Name of the file with the graph's information.
      */
     Graph(
-        const char* type,
-        const char* filename,
-        bool& read);
+        const char *type,
+        const char *filename,
+        bool &read);
 
     /**
      * This procedure generates the degeneracy ordering of the graph (Matula and
@@ -123,7 +129,7 @@ public:
      * be created here.
      */
     void degeneracyOrdering(
-        std::vector<subgraph>& subgraphs);
+        std::vector<subgraph> &subgraphs);
 
 
     /**
@@ -140,7 +146,7 @@ public:
      */
     void generateCompGraphRightNeighbors(
         int v,
-        std::vector<subgraph>& sG);
+        std::vector<subgraph> &sG);
 
     /**
      * In order to reduce the memory consumption, this method clears the vectors 

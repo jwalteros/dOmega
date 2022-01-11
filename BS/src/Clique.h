@@ -18,7 +18,7 @@
  * @author Jose L. Walteros
  *
  * @version   1.0
- * @date      January 2018
+ * @date      June 2018
  *
  * Copyright (C) 2018 Jose L. Walteros. All rights reserved.
  *
@@ -36,16 +36,16 @@
 class Clique
 {
 public:
-    int numThreads;                               /**< Number of threads to use in the run */
-    std::atomic<int> cliqueLB;                    /**< Lower bound of max clique */
-    std::atomic<int> cliqueUB;                    /**< Upper bound of max clique */
-    std::atomic<bool> cliqueFlag;                 /**< Whether a thread has found a clique */
-    std::atomic<int> subgraphClique;              /**< subgraph that has a maximum clique */
-    std::vector<int> sortedList;                  /**< List of vertices sorted by their right degree */
-    Graph &graph;                                 /**< Graph */
-    std::vector<subgraph> subgraphs;              /**< Subgraphs induced by closed right neighborhood of the vertices */
+    int numThreads; /**< Number of threads to use in the run */
+    std::atomic<int> cliqueLB;  /**< Lower bound of max clique */
+    std::atomic<int> cliqueUB; /**< Upper bound of max clique */
+    std::atomic<bool> cliqueFlag; /**< Whether a thread has found a clique */
+    std::atomic<int> subgraphClique; /**< subgraph that has a maximum clique */
+    std::vector<int> sortedList; /**< List of vertices sorted by their right degree */
+    Graph &graph; /**< Graph */
+    std::vector<subgraph> subgraphs; /**< Subgraphs induced by closed right neighborhood of the vertices */
     std::chrono::duration<double> degeneracyTime; /**< Degeneracy running time */
-    std::chrono::duration<double> runningTime;    /**< Total running time */
+    std::chrono::duration<double> runningTime; /**< Total running time */
 
     /**
      * Clique object constuctor.

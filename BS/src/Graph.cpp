@@ -15,7 +15,7 @@
  * @author Jose L. Walteros
  *
  * @version   1.0
- * @date      January 2018
+ * @date      June 2018
  *
  * Copyright (C) 2018 Jose L. Walteros. All rights reserved.
  *
@@ -30,6 +30,7 @@
 #include <fstream>
 #include <algorithm>
 
+
 Graph::Graph(
     const char *type,
     const char *filename,
@@ -40,7 +41,8 @@ Graph::Graph(
 
     if (!file)
     {
-        std::cerr << "ERROR: could not open file '" << filename << " for reading" << std::endl;
+        std::cerr << "ERROR: could not open file '" << filename <<
+        " for reading" << std::endl;
         read = false;
     }
     file >> n >> m;
@@ -69,7 +71,7 @@ Graph::Graph(
         EdgesBegin = std::vector<int>(n, 0);
         degree = std::vector<int>(n, 0);
         alias = std::vector<int>(n, 0);
-        std::vector<std::set<int>> adjLists(n, std::set<int>());
+        std::vector<std::set<int> > adjLists(n, std::set<int>());
         real_m = 0;
         std::chrono::high_resolution_clock::time_point begin_time = std::chrono::high_resolution_clock::now();
 
@@ -198,7 +200,7 @@ Graph::Graph(
         }
 
         std::chrono::high_resolution_clock::time_point end_time = std::chrono::high_resolution_clock::now();
-        readTime = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - begin_time);
+        readTime = std::chrono::duration_cast<std::chrono::duration<double> >(end_time - begin_time);
         rightDegree = std::vector<int>(n, 0);
         position = std::vector<int>(n, 0);
         ordering = std::vector<int>(n, 0);
@@ -245,6 +247,11 @@ void Graph::degeneracyOrdering(
     }
     buckets[0] = 0;
 
+    /**
+     * If the subgraph induced by the d-core is d-regular, dRegular will store
+     * the position of the first vertex of the d-core in the degerenracy ordering.
+     */
+    int dRegular = -1;
     int minV;
 
     for (int i = 0; i < n; i++)
@@ -273,6 +280,10 @@ void Graph::degeneracyOrdering(
         if (rightDegree[minV] > d)
         {
             d = rightDegree[minV];
+            if (rightDegree[ordering[n - 1]] == d)
+            {
+                dRegular = i;
+            }
         }
 
         /**
@@ -339,6 +350,49 @@ void Graph::degeneracyOrdering(
     }
 
     cliqueUB = d + 1;
+
+    if ((dRegular > 0) && (cliqueLB < cliqueUB))
+    {
+        bool clique = false;
+        std::vector<int> S(n);
+        int head = 0;
+        int tail = 0;
+        std::vector<bool> discovered(n, false);
+
+        for (std::vector<int>::iterator i = ordering.begin() + dRegular; i < ordering.end(); i++)
+        {
+            int count = 0;
+            S[tail++] = *i;
+            discovered[*i] = true;
+            count++;
+
+            while (head < tail)
+            {
+                int v = S[head++];
+
+                for (int j = EdgesBegin[v]; j < degree[v] + EdgesBegin[v]; j++)
+                {
+                    if ((position[EdgeTo[j]] > dRegular) && !discovered[EdgeTo[j]])
+                    {
+                        discovered[EdgeTo[j]] = true;
+                        S[tail++] = EdgeTo[j];
+                        count++;
+                    }
+                }
+            }
+
+            if (count == d + 1)
+            {
+                clique = true;
+                break;
+            }
+        }
+
+        if (!clique)
+        {
+            cliqueUB = d;
+        }
+    }
 }
 
 void Graph::degeneracyOrdering()
@@ -453,7 +507,7 @@ void Graph::degeneracyOrdering()
     }
 
     std::chrono::high_resolution_clock::time_point end_time = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> degeneracyTime = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - begin_time);
+    std::chrono::duration<double> degeneracyTime = std::chrono::duration_cast<std::chrono::duration<double> >(end_time - begin_time);
 
     std::clog << "Degeneracy: " << d << "\n";
     std::clog << "Order: [";
@@ -490,7 +544,7 @@ void Graph::generateCompGraphRightNeighbors(
      * the degeneracy ordering. The std::vector includes v as well.
      */
     subgraphs[v].created = true;
-    subgraphs[v].adjLists = std::vector<std::vector<int>>(subgraphs[v].n);
+    subgraphs[v].adjLists = std::vector<std::vector<int> >(subgraphs[v].n);
 
     /**
      * The following code finds, for each pair of vertices in the subgraph, if
@@ -499,7 +553,6 @@ void Graph::generateCompGraphRightNeighbors(
      *
      * See G. Manoussakis. New algorithms for cliques and related structures in k-degenerate graphs. arXiv preprint arXiv:1501.01819v4, 2016
      */
-
     int largestDegree = 0;
 
     std::vector<std::vector<bool>> incMat(subgraphs[v].n, std::vector<bool>(subgraphs[v].n, false));
@@ -601,6 +654,8 @@ void Graph::print()
 void Graph::printShort()
 {
     std::clog << "-------------------------------------------------------------\n";
-    std::clog << "Filename: " << name << "\nn: " << n << "\nm: " << m << "\ndelta: " << delta << "\nDelta: " << Delta << "\nReading time: " << readTime.count() << "\n";
+    std::clog << "Filename: " << name << "\nn: " << n << "\nm: " << m <<
+    "\ndelta: " << delta << "\nDelta: " << Delta << "\nReading time: " <<
+    readTime.count() << "\n";
     std::clog << "-------------------------------------------------------------\n";
 }

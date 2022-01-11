@@ -51,7 +51,7 @@ void processSubgraphs(
     {
         int v = sortedList[i];
 
-        int k = subgraphs[v].n + 1 - clq;
+        int k = graph.rightDegree[v] + 1 - clq;
 
         if (k >= 0)
         {
@@ -140,7 +140,7 @@ int Clique::findMaxClique()
     cliqueUB = graph.cliqueUB;
     cliqueLB = graph.cliqueLB;
     std::chrono::high_resolution_clock::time_point end_time = std::chrono::high_resolution_clock::now();
-    degeneracyTime = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - begin_time);
+    degeneracyTime = std::chrono::duration_cast<std::chrono::duration<double> >(end_time - begin_time);
 
     /**
      * If the upper and lower bounds are different, the vertices are sorted
@@ -175,12 +175,10 @@ int Clique::findMaxClique()
 
         int clq = cliqueUB;
         std::vector<std::thread> threads(numThreads);
-        graph.clearElements();
 
         while (cliqueLB < cliqueUB)
         {
             cliqueFlag = false;
-
             for (int i = 0; i < numThreads; i++)
             {
                 std::thread th(&processSubgraphs,
@@ -211,7 +209,7 @@ int Clique::findMaxClique()
         }
     }
     end_time = std::chrono::high_resolution_clock::now();
-    runningTime = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - begin_time);
+    runningTime = std::chrono::duration_cast<std::chrono::duration<double> >(end_time - begin_time);
 
     std::clog << "Number of threads used: " << numThreads << "\n";
     std::clog << "Degeneracy: " << graph.d << "\n";
